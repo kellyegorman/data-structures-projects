@@ -1,0 +1,213 @@
+import org.junit.*;
+import static org.junit.Assert.*;
+import java.lang.IndexOutOfBoundsException;
+
+public class DIBTester {
+  
+  DualImplementationBag<String> dibTrue = new DualImplementationBag<String>(true);
+  DualImplementationBag<String> dibFalse = new DualImplementationBag<String>(false);
+  DemoBag dbTest = new DemoBag();
+  
+  @Test
+  public void testSetUseArrayList() {
+    dibTrue.add("one");
+    dibFalse.add("one");
+    assertEquals("dibTrue is AL", true, dibTrue.getUseArrayList());
+    assertEquals("dibFalse is LL", false, dibFalse.getUseArrayList());
+    dibTrue.setUseArrayList(false);
+    assertEquals("dibTrue is AL now", false, dibTrue.getUseArrayList());
+    assertEquals("both false now", dibTrue.getUseArrayList(), dibFalse.getUseArrayList());
+  }
+  
+  @Test
+  public void testAdd() {
+    assertEquals(dibTrue.size(), 0, 0);
+    dibTrue.add("one");
+    assertEquals("first element string", "one", dibTrue.get(0));
+    assertEquals(dibTrue.size(), 1, 0);
+    dibTrue.add("two");
+    assertEquals("second element string", "two", dibTrue.get(1));
+    assertEquals(dibTrue.size(), 2, 0);
+    dibFalse.add("one");
+    assertEquals("first element string", "one", dibFalse.get(0));
+    dibFalse.add("two");
+    assertEquals("second element string", "two", dibFalse.get(1));
+  }
+  
+  @Test 
+  public void testRemove() {
+    dibTrue.add("one");
+    dibTrue.add("two");
+    dibTrue.add("three");
+    assertEquals(dibTrue.size(), 3, 0);
+    dibTrue.remove("three");
+    assertEquals(dibTrue.size(), 2, 0);
+    dibTrue.remove("one");
+    assertEquals(dibTrue.size(), 1, 0);
+    assertEquals("'two' only element remaining", dibTrue.get(0), "two");
+  }
+  
+  @Test 
+  public void testContains() {
+    dibTrue.add("one");
+    dibTrue.add("two");
+    assertEquals("list includes this element", true, dibTrue.contains("one"));
+    assertEquals("list includes this element", true, dibTrue.contains("two"));
+    assertEquals("list doesn't include element", false, dibTrue.contains("three"));
+    assertEquals("different list, doesn't include element", false, dibFalse.contains("one"));
+    dibTrue.remove("two");
+    assertEquals("list doesn't include element anymore", false, dibTrue.contains("two"));
+  }
+  
+  @Test
+  public void testIsEmpty() {
+    assertEquals("no elements added", true, dibTrue.isEmpty());
+    dibTrue.add("one");
+    assertEquals("one element added", false, dibTrue.isEmpty());
+    dibTrue.add("two");
+    dibTrue.remove("one");
+    assertEquals("element removed, not empty", false, dibTrue.isEmpty());
+    dibTrue.remove("two");
+    assertEquals("element removed, empty", true, dibTrue.isEmpty());
+    assertEquals("no elements ever added or removed", true, dibFalse.isEmpty());
+  }
+  
+  @Test
+  public void testSize() {
+    //No elements added
+    assertEquals(dibTrue.size(), 0, 0);
+    //add one element
+    dibTrue.add("one");
+    assertEquals(dibTrue.size(), 1, 0);
+    //add another element
+    dibTrue.add("two");
+    assertEquals(dibTrue.size(), 2, 0);
+    //remove an element
+    dibTrue.remove("one");
+    assertEquals(dibTrue.size(), 1, 0);
+    //remove another element and test if same size as empty bag
+    dibTrue.remove("two");
+    assertEquals("bags are now both size 0", dibTrue.size(), dibFalse.size());
+  }
+  
+  @Test
+  public void testGetFrequencyOf() {
+    //empty list, no elements
+    assertEquals(0, dibTrue.getFrequencyOf("one"), 0);
+    dibTrue.add("one");
+    //different element
+    assertEquals(0, dibTrue.getFrequencyOf("two"), 0);
+    //one occurrence 
+    assertEquals(1, dibTrue.getFrequencyOf("one"), 0);
+    dibTrue.add("one");
+    dibTrue.add("two");
+    //no occurrences
+    assertEquals(0, dibTrue.getFrequencyOf("three"), 0);
+    //one occurrence
+    assertEquals(1, dibTrue.getFrequencyOf("two"), 0);
+    //two occurrences
+    assertEquals(2, dibTrue.getFrequencyOf("one"), 0);
+  }
+  
+  @Test
+  public void testGet() {
+    dibTrue.add("one");
+    assertEquals("first element, index 0", "one", dibTrue.get(0));
+    dibTrue.add("two");
+    assertEquals("still index 0, even after adding another element", "one", dibTrue.get(0));
+    assertEquals("index 1, added another element", "two", dibTrue.get(1));
+    dibFalse.add("ngksjerhgiushGEIFeritoAFauhwerio");
+    assertEquals("works in a different bag with a random string", "ngksjerhgiushGEIFeritoAFauhwerio", dibFalse.get(0));
+  }
+  
+  @Test
+  public void testRemoveAll() {
+    dibTrue.add("one");
+    dibTrue.add("two");
+    //see if element is on list before removal
+    assertEquals(1, dibTrue.getFrequencyOf("one"), 0); 
+    dbTest.removeAll(dibTrue, "one");
+    //see if element was removed
+    assertEquals(0, dibTrue.getFrequencyOf("one"), 0);
+    //see if elements not specfied were not removed
+    assertEquals(1, dibTrue.getFrequencyOf("two"), 0);
+    dibTrue.add("three");
+    dibTrue.add("three");
+    dibTrue.add("three");
+    //see if three instance of element are on list
+    assertEquals(3, dibTrue.getFrequencyOf("three"), 0);
+    dbTest.removeAll(dibTrue, "three");
+    //see if elements were all removed
+    assertEquals(0, dibTrue.getFrequencyOf("three"), 0);
+    //see if elements not specified were not removed
+    assertEquals(1, dibTrue.getFrequencyOf("two"), 0);
+  }
+  
+  @Test
+  public void testRetainAll() {
+    dibTrue.add("one");
+    dibTrue.add("two");
+    dibTrue.add("three");
+    dibTrue.add("one");
+    dibTrue.add("one");
+    //size and elements before removing
+    assertEquals(5, dibTrue.size(), 0);
+    assertEquals("second element in dibTrue before retaining", "two", dibTrue.get(1));
+    //size and elements after removing
+    dbTest.retainAll(dibTrue, "one");
+    assertEquals("second element after retainAll called", "one", dibTrue.get(1));
+    assertEquals("first element after retainAll called", "one", dibTrue.get(0));
+    assertEquals(3, dibTrue.size(), 0);
+  }
+  
+  @Test
+  public void testUnion() {
+    DualImplementationBag<String> bagUnion = new DualImplementationBag<String>(true);
+    dibTrue.add("one");
+    dibTrue.add("two");
+    dibFalse.add("three");
+    dibFalse.add("four");
+    bagUnion = dbTest.union(dibTrue, dibFalse);
+    assertEquals("first element in union - from dibTrue", "one", bagUnion.get(0));
+    assertEquals("second element in union - from dibTrue", "two", bagUnion.get(1));
+    assertEquals("third element in union - from dibFalse", "three", bagUnion.get(2));
+    assertEquals("fourth element in union - from dibFalse", "four", bagUnion.get(3));
+    bagUnion.remove("three");
+    assertEquals("bagUnion acts like regular bag, remove method still works", "four", bagUnion.get(2));
+  }
+  
+  @Test
+  public void testIntersection() {
+    DualImplementationBag<String> bagIntersect = new DualImplementationBag<String>(true);
+    dibTrue.add("one");
+    dibTrue.add("two");
+    dibTrue.add("three");
+    dibTrue.add("four");
+    dibFalse.add("three");
+    dibFalse.add("four");
+    dibFalse.add("five");
+    dibFalse.add("six");
+    bagIntersect = dbTest.intersection(dibTrue, dibFalse);
+    assertEquals("first element in both is String three", "three", bagIntersect.get(0));
+    assertEquals("second element in both is String four", "four", bagIntersect.get(1));
+    bagIntersect.remove("three");
+    assertEquals("bagIntersect acts like regular bag, remove method still works", "four", bagIntersect.get(0));
+  }
+  
+  @Test
+  public void testDifference() {
+    DualImplementationBag<String> bagDifference = new DualImplementationBag<String>(true);
+    dibTrue.add("one");
+    dibTrue.add("two");
+    dibTrue.add("three");
+    dibTrue.add("four");
+    dibFalse.add("three");
+    dibFalse.add("four");
+    bagDifference = dbTest.difference(dibTrue, dibFalse);
+    assertEquals("first element in bag 1 but not bag 2", "one", bagDifference.get(0));
+    assertEquals("second element in bag 1 but not bag 2", "two", bagDifference.get(1));
+    bagDifference.remove("one");
+    assertEquals("bagDifference acts like regular bag, remove method still works", "two", bagDifference.get(0));
+  }
+  
+}

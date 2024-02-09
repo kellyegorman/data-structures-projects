@@ -1,0 +1,87 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class DualImplementationBag<T> {
+  
+  private boolean useArrayList;
+  
+  private List<T> internalList;
+  
+  public DualImplementationBag(boolean useArrayList) {
+    if (useArrayList) {
+      this.internalList = new ArrayList<T>();
+      this.useArrayList = useArrayList;
+    }
+    else {
+      this.internalList = new LinkedList<T>();
+      this.useArrayList = useArrayList;
+    }
+  }
+  
+  public void setUseArrayList(boolean useArrayList) {
+    if(useArrayList) {
+      this.internalList = new LinkedList<T>();
+      this.useArrayList = true;
+    } 
+    else {
+      this.internalList = new ArrayList<T>();
+      this.useArrayList = false;
+    }
+  }
+  
+  public boolean getUseArrayList() {
+    return this.useArrayList;
+  }
+  
+  public boolean add(T element) {
+      return internalList.add(element);
+  }
+  
+  public boolean remove(T element) {
+      return internalList.remove(element);
+  }
+  
+  public boolean contains(T element) {
+    boolean elementIsIncluded = false;
+    for(int i = 0; i < internalList.size(); i++) {
+      if(internalList.get(i).equals(element)) {
+        elementIsIncluded = true;
+      }
+    }
+    return elementIsIncluded;
+  }
+  
+  public boolean isEmpty() {
+    boolean hasNoElements = true;
+    for(int i = 0; i < internalList.size(); i++) {
+      if(internalList.get(i) != null) { 
+        hasNoElements = false;
+      }
+    }
+    return hasNoElements;
+  }
+  
+  public int size() {
+    int lengthSoFar = 0;
+    for(T element:internalList) {
+      lengthSoFar++;
+    }
+    return lengthSoFar;
+  }
+  
+  public int getFrequencyOf(T element){
+    int frequencyOf = 0;
+    for(int i = 0; i < internalList.size(); i++) {
+      if(internalList.get(i).equals(element)) {
+        frequencyOf++;
+      }
+    }
+    return frequencyOf;
+  }
+  
+  public T get(int index) {
+    return internalList.get(index);
+  }
+  
+}

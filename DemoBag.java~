@@ -1,0 +1,62 @@
+public class DemoBag {
+  
+  public <T> void removeAll(DualImplementationBag<T> bag, T element) {
+    for(int i = 0; i < bag.size(); i++) {
+      if(bag.get(i).equals(element)) {
+        bag.remove(bag.get(i));
+        i--;
+      }
+    }
+  }
+  
+  public <T> void retainAll(DualImplementationBag<T> bag, T element) {
+    for(int i = 0; i < bag.size(); i++) {
+      if(!bag.get(i).equals(element)) {
+        bag.remove(bag.get(i));
+        i--;
+      }
+    }
+  }
+  
+  public <T> DualImplementationBag<T> union(DualImplementationBag<T> otherBag1, 
+               DualImplementationBag<T> otherBag2) {
+    DualImplementationBag<T> newBag = new DualImplementationBag<T>(true);
+    for(int i = 0; i < otherBag1.size(); i++) {
+      newBag.add(otherBag1.get(i));
+    }
+    for(int i = 0; i < otherBag2.size(); i++) {
+      newBag.add(otherBag2.get(i));
+    }
+    return newBag;
+  }
+  
+  public <T> DualImplementationBag<T> intersection(DualImplementationBag<T> otherBag1, 
+                      DualImplementationBag<T> otherBag2) {
+    DualImplementationBag<T> newBag = new DualImplementationBag<T>(true);
+    for(int i = 0; i < otherBag1.size(); i++) {
+      for(int j = 0; j < otherBag2.size(); j++) {
+        if(otherBag1.get(i).equals(otherBag2.get(j))) {
+          newBag.add(otherBag1.get(i));
+        }
+      }
+    }
+    return newBag;
+  }
+  
+  public <T> DualImplementationBag<T> difference(DualImplementationBag<T> otherBag1, 
+                    DualImplementationBag<T> otherBag2) {
+    DualImplementationBag<T> newBag = new DualImplementationBag<T>(true);
+    for(int i = 0; i < otherBag1.size(); i++) {
+      newBag.add(otherBag1.get(i));
+    }
+    for(int i = 0; i < otherBag2.size(); i++) {
+      for (int j = 0; j < newBag.size(); j++) {
+        if (newBag.get(j).equals(otherBag2.get(i))) {
+          newBag.remove(newBag.get(j));
+        }
+      }
+    }
+    return newBag;
+  }
+  
+}
