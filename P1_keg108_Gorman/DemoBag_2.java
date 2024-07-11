@@ -2,7 +2,7 @@
  * @author Kelly Gorman
  * class that adds additional functionalities to DualImplementationBag instances
  */
-public class DemoBag {
+public class DemoBag_2 {
   
   /* 
    * Removes all instances of an element from a bag, retaining all else
