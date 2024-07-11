@@ -8,13 +8,13 @@ import java.lang.IndexOutOfBoundsException;
 public class DIBTester {
   
   //field that represents a bag that stores an ArrayList
-  DualImplementationBag<String> dibTrue = new DualImplementationBag<String>(true);
+  DualImplementationBag_2<String> dibTrue = new DualImplementationBag_2<String>(true);
   
   //field that represents a bag that stores a LinkedList
-  DualImplementationBag<String> dibFalse = new DualImplementationBag<String>(false);
+  DualImplementationBag_2<String> dibFalse = new DualImplementationBag_2<String>(false);
   
   //field that stores a DemoBag to test DB methods
-  DemoBag dbTest = new DemoBag();
+  DemoBag_2 dbTest = new DemoBag_2();
   
   /*
    * Method to test useArrayList method in DualImplementationBag class
@@ -239,7 +239,7 @@ public class DIBTester {
    */
   @Test
   public void testUnion() {
-    DualImplementationBag<String> bagUnion = new DualImplementationBag<String>(true);
+    DualImplementationBag_2<String> bagUnion = new DualImplementationBag_2<String>(true);
     dibTrue.add("one");
     dibTrue.add("two");
     dibFalse.add("three");
@@ -261,8 +261,8 @@ public class DIBTester {
    */
   @Test
   public void testIntersection() {
-    DualImplementationBag<String> bagIntersect = new DualImplementationBag<String>(true);
-    DualImplementationBag<String> bagIntersectTwo = new DualImplementationBag<String>(true);
+    DualImplementationBag_2<String> bagIntersect = new DualImplementationBag_2<String>(true);
+    DualImplementationBag_2<String> bagIntersectTwo = new DualImplementationBag_2<String>(true);
     dibTrue.add("one");
     dibTrue.add("two");
     dibTrue.add("three");
@@ -291,8 +291,8 @@ public class DIBTester {
    */
   @Test
   public void testDifference() {
-    DualImplementationBag<String> bagDifference = new DualImplementationBag<String>(true);
-    DualImplementationBag<String> bagDifferenceTwo = new DualImplementationBag<String>(true);
+    DualImplementationBag_2<String> bagDifference = new DualImplementationBag_2<String>(true);
+    DualImplementationBag_2<String> bagDifferenceTwo = new DualImplementationBag_2<String>(true);
     dibTrue.add("one");
     dibTrue.add("two");
     dibTrue.add("three");
@@ -314,5 +314,5 @@ public class DIBTester {
     //and "three" appears in dibFalse
     assertEquals(3, bagDifferenceTwo.size(), 0);
   }
-  
+
 }
